@@ -15,6 +15,7 @@ NAME = libftprintf.a
 CFLAGS = -Wall -Wextra -Werror -Iincludes
 
 FT_PRINTF = ft_printf.c\
+		./ft_printf/check_flags_modif.c\
         ./ft_printf/active_bits.c\
         ./ft_printf/m_putchar.c\
         ./ft_printf/m_putstr.c\
@@ -47,6 +48,8 @@ FT_PRINTF = ft_printf.c\
 		./ft_printf/put_padding.c\
 		./ft_printf/prec_diff.c\
 		./ft_printf/put_float.c\
+		./ft_printf/if_color.c\
+		./ft_printf/color_off.c\
 
 LIBFT = ft_memset.c\
 		ft_bzero.c\

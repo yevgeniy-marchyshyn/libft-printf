@@ -38,6 +38,7 @@ typedef	struct		s_printf
 	char			j;
 	char			z;
 	char			type;
+	char 			if_color;
 	int				w;
 	int				p;
 	int				w_default;
@@ -46,6 +47,7 @@ typedef	struct		s_printf
 }					t_printf;
 
 int					ft_printf(const char *format, ...);
+int					check_flags_modif(t_printf *p, char c);
 int					active_bits(unsigned int c);
 int					m_putchar(unsigned int c);
 int					m_putstr(char *string, int end, int flag);
@@ -76,5 +78,7 @@ int					put_unknown_type(t_printf *p);
 int					put_padding(int c, int n);
 int					prec_diff(wchar_t *ls, unsigned int end);
 int					put_float(t_printf *p, va_list *ap);
+const char			*if_color(char *format, t_printf *p, char esc);
+void				color_off(char esc);
 
 #endif

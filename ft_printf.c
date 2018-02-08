@@ -16,7 +16,7 @@ static int				type_printf(va_list *ap, t_printf *p)
 {
 	if (p->type == '%')
 		return (put_percent(p));
-	else if (p->type == 'd' || p->type == 'D' || p->type == 'i')
+	if (p->type == 'd' || p->type == 'D' || p->type == 'i')
 		return (put_dec(p, modificator_dec(p, ap)));
 	else if (p->type == 'u' || p->type == 'U')
 		return (put_unsigned(p, modificator_uns(p, ap)));
@@ -38,29 +38,6 @@ static int				type_printf(va_list *ap, t_printf *p)
 		return (put_float(p, ap));
 	else
 		return (put_unknown_type(p));
-}
-
-static int				check_flags_modif(t_printf *p, char c)
-{
-	if (c == '#')
-		p->alternative_form = 1;
-	else if (c == '0')
-		p->zero_padding = 1;
-	else if (c == '-')
-		p->left_adjustment = 1;
-	else if (c == '+')
-		p->sign = 1;
-	else if (c == ' ')
-		p->space = 1;
-	else if (c == 'l')
-		p->l += 1;
-	else if (c == 'h')
-		p->h += 1;
-	else if (c == 'j')
-		p->j = 1;
-	else if (c == 'z')
-		p->z = 1;
-	return (1);
 }
 
 static char				*parse_precision(char *format, va_list *ap, t_printf *p)
@@ -113,6 +90,32 @@ static const char		*parse_format(char *format, va_list *ap, t_printf *p)
 	return ((const char*)(*format == '\0' ? format : format + 1));
 }
 
+static int			do_printf(const char *format, t_printf *p, va_list *ap)
+{
+	int ret;
+
+	ret = 0;
+	p->if_color = 0;
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			annulation(p);
+			format = parse_format((char*)++format, ap, p);
+			ret += p->type ? type_printf(ap, p) : 0;
+		}
+		else if (*format == '{')
+		{
+			format = if_color((char*)format, p, 27);
+			ret += *format == '{' ? (int)write(1, (void*)format++, 1) : 0;
+		}
+		else
+			ret += (int)write(1, (void*)format++, 1);
+	}
+	p->if_color ? color_off(27) : 0;
+	return (ret);
+}
+
 int						ft_printf(const char *format, ...)
 {
 	int			ret;
@@ -121,17 +124,7 @@ int						ft_printf(const char *format, ...)
 
 	ret = 0;
 	va_start(ap, format);
-	while (*format != '\0')
-	{
-		if (*format == '%')
-		{
-			annulation(&p);
-			format = parse_format((char*)++format, &ap, &p);
-			ret += p.type ? type_printf(&ap, &p) : 0;
-		}
-		else
-			ret += (int)write(1, (void*)format++, 1);
-	}
+	ret += do_printf(format, &p, &ap);
 	va_end(ap);
 	return (ret);
 }
