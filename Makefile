@@ -48,6 +48,7 @@ FT_PRINTF = ft_printf.c\
 		./ft_printf/put_padding.c\
 		./ft_printf/prec_diff.c\
 		./ft_printf/put_float.c\
+		./ft_printf/put_binary.c\
 		./ft_printf/if_color.c\
 		./ft_printf/color_off.c\
 
@@ -115,12 +116,8 @@ FT_PRINTF_OBJ = $(FT_PRINTF:.c=.o)
 all: $(NAME)
 
 $(NAME): $(FT_PRINTF_OBJ) $(LIBFT_OBJ)
-	#gcc -c $(FLAGS) $<
 	ar rc $(NAME) $(FT_PRINTF_OBJ) $(LIBFT_OBJ)
 	ranlib $(NAME)
-
-#%.o: %.c
-#	gcc -c $(FLAGS) $<
 
 clean:
 	/bin/rm -f $(FT_PRINTF_OBJ) $(LIBFT_OBJ)

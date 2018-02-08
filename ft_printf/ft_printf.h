@@ -78,6 +78,7 @@ int					put_unknown_type(t_printf *p);
 int					put_padding(int c, int n);
 int					prec_diff(wchar_t *ls, unsigned int end);
 int					put_float(t_printf *p, va_list *ap);
+int					put_binary(t_printf *p, char *s);
 const char			*if_color(char *format, t_printf *p, char esc);
 void				color_off(char esc);
 

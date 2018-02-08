@@ -36,8 +36,9 @@ static int				type_printf(va_list *ap, t_printf *p)
 		return (put_p(p, ibs_uns((size_t)va_arg(*ap, void*), 16)));
 	else if (p->type == 'f' || p->type == 'F')
 		return (put_float(p, ap));
-	else
-		return (put_unknown_type(p));
+	else if (p->type == 'b')
+		return (put_binary(p, ibs_uns(va_arg(*ap, size_t), 2)));
+	return (put_unknown_type(p));
 }
 
 static char				*parse_precision(char *format, va_list *ap, t_printf *p)
